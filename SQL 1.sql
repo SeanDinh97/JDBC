@@ -29,7 +29,17 @@ CREATE TABLE Books (
 --Data for the table WritingGroups
 
 INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
-();
+('Los Angeles Writing Group', 'John Smith', '2009', 'Fiction');
+INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
+('Santa Monica Writing Group', 'Michael Williams', '2012', 'Nonfiction');
+INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
+('Garden Grove Writing Group', 'David Robinson', '2011', 'Romance');
+INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
+('Long Beach Writing Group', 'Mary Jones', '2014', 'Horror');
+INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
+('Santa Ana Writing Group', 'Sophia Taylor', '2006', 'Mystery');
+INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
+('Fullerton Writing Group', 'Isabella Hernandez', '2004', 'Drama');
 
 --Data for the table Publishers
 INSERT INTO Publishers (PublisherName, PublisherAddress, PublisherPhone, PublisherEmail) VALUES
