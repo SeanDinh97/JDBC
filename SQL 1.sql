@@ -29,7 +29,7 @@ CREATE TABLE Books (
 --Data for the table WritingGroups
 
 INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
-();
+('Los Angeles Writing Group', 'John Smith', 2011, 'Fictional');
 
 --Data for the table Publishers
 INSERT INTO Publishers (PublisherName, PublisherAddress, PublisherPhone, PublisherEmail) VALUES
