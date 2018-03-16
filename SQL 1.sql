@@ -1,3 +1,4 @@
+--Table structure of table WritingGroups
 CREATE TABLE WritingGroups (
     GroupName  varchar(20) NOT NULL,
     HeadWriter varchar(30),
@@ -5,6 +6,7 @@ CREATE TABLE WritingGroups (
     Subject    varchar(20),
     CONSTRAINT WritingGroups_pk PRIMARY KEY (GroupName)
  );
+--Table structure of table Publishers
 CREATE TABLE Publishers (
     PublisherName varchar(100) NOT NULL,
     PublisherAddress varchar (100),
@@ -12,6 +14,7 @@ CREATE TABLE Publishers (
     PublisherEmail varchar (100),
     CONSTRAINT Publishers_pk PRIMARY KEY (PublisherName)
 );
+--Table structure of table Books
 CREATE TABLE Books (
     GroupName varchar(20) NOT NULL,
     BookTitle varchar(100)NOT NULL,
@@ -22,3 +25,16 @@ CREATE TABLE Books (
     CONSTRAINT Books_fk FOREIGN KEY (GroupName) REFERENCES WritingGroups (GroupName),
     CONSTRAINT Books_fk2 FOREIGN KEY (PublisherName) REFERENCES Publishers (PublisherName)
 );
+
+--Data for the table WritingGroups
+
+INSERT INTO WritingGroups(GroupName, HeadWriter, YearFormed, Subject) VALUES 
+();
+
+--Data for the table Publishers
+INSERT INTO Publishers (PublisherName, PublisherAddress, PublisherPhone, PublisherEmail) VALUES
+();
+
+--Data for the table Books
+INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
+();
