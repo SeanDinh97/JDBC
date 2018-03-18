@@ -77,7 +77,7 @@ public class JDBC {
                 listPublishers(stmt);
             }
             else if (input == 4) {
-                listSpecifiedPublishers(stmt);
+                listSpecifiedPublishers();
             }
             else if (input == 5) {
                 listBooks(stmt);
