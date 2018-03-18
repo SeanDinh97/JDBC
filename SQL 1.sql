@@ -83,7 +83,7 @@ public class JDBC {
                 insertBook(stmt);
             }
             else if (input == 8) {
-                listSpecifiedBooks(stmt);
+                insertPublisher(stmt);
             }
             else if (input == 9) {
                 deleteSpecifiedBooks(stmt);
@@ -259,6 +259,32 @@ public class JDBC {
        pstmt.setString(3, publisher);
        pstmt.setString(4, year);
        pstmt.setString(5, page);
+       pstmt.executeUpdate();
+    }
+    public static void insertPublisher(Statement stmt) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the publisher name:");
+        String pName = in.nextLine();
+        System.out.println("Enter the publisher address:");
+        String pAddress = in.nextLine();
+        System.out.println("Enter the publisher phone:");
+        String pPhone = in.nextLine();
+        System.out.println("Enter the publisher email:");
+        String pEmail = in.nextLine();
+     
+
+       String sql;
+       
+       sql = "INSERT INTO Publishers ( PublisherName ,PublisherAddress, PublisherPhone, PublisherEmail) VALUES" + 
+               "(?,?,?,?)";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, pName);
+       pstmt.setString(2, pAddress);
+       pstmt.setString(3, pPhone);
+       pstmt.setString(4, pEmail);
        pstmt.executeUpdate();
     }
 }//end FirstExample}
