@@ -53,6 +53,8 @@ public class JDBC {
                 + "5) List all book titles\n"
                 + "6) List all the data for a book specified by the user\n"
                 + "7) Insert a new book\n"
+                + "8) Insert a new publisher\n"
+                + "9) Delete a book\n"
                 + "Enter your choice");
             listWritingGroups(stmt);
             listPublishers(stmt);
