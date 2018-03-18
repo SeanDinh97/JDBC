@@ -62,7 +62,6 @@ public class JDBC {
                 + "7) Insert a new book\n"
                 + "8) Insert a new publisher\n"
                 + "9) Delete a book\n"
-                + "10)Quit\n"
                 + "Enter your choice");
             while(quit)
             {
@@ -90,14 +89,10 @@ public class JDBC {
                 insertBook();
             }
             else if (input == 8) {
-                insertPublisher(stmt);
+                insertPublisher();
             }
             else if (input == 9) {
-                deleteSpecifiedBooks(stmt);
-            }
-            else if (input == 10) {
-                System.out.println("Program quitted");
-                quit = false;
+                deleteSpecifiedBooks();
             }
             else {
                 System.out.println("Invalid input");
@@ -177,15 +172,27 @@ public class JDBC {
                  dispNull(bookTitle));
         }
     }
-    public static void listSpecifiedWritingGroups (Statement stmt) throws SQLException{
+    public static void listSpecifiedWritingGroups () throws SQLException{
       
        System.out.println("Which group would you like to look up: "); 
        String Group = in.nextLine();
        String sql;
-       sql = "SELECT * FROM WritingGroups WHERE GroupName ='"+Group+"'";
-       ResultSet rs = stmt.executeQuery(sql);
+       Connection conn = DriverManager.getConnection(DB_URL);
+       
+       sql = "SELECT * FROM WritingGroups WHERE GroupName =?";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, Group);
+       
+       ResultSet rs = pstmt.executeQuery();
+       boolean exist = rs.next();
+       if (exist == false) {
+                System.out.println("Specified group does not exist!");
+       }
+       else{
+       
        System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
-       while (rs.next()) {
+       //System.out.println(rs.next());
+       while (exist) {
                 //Retrieve by column name
                 String groupName = rs.getString("GroupName");
                 String headWriter = rs.getString("HeadWriter");
@@ -195,7 +202,9 @@ public class JDBC {
                 //Display values
                 System.out.printf(displayFormat, 
                         dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
-        }
+                exist = rs.next();
+                        }
+       }
     }
     public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
         System.out.println("Which publisher would you like to look up: "); 
@@ -203,6 +212,10 @@ public class JDBC {
         String sql; 
         sql = "SELECT * FROM Publishers WHERE PublisherName ='"+PublisherName+"'"; 
         ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next() == false) {
+                System.out.println("Specified publisher does not exist!");
+       }
+       else{
         System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
         while (rs.next()) { 
 //Retrieve by column name 
@@ -212,6 +225,7 @@ public class JDBC {
             String publisherEmail = rs.getString("PublisherEmail"); 
         System.out.printf(displayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+            }
         }
     }
     public static void listSpecifiedBooks (Statement stmt) throws SQLException{
@@ -221,6 +235,10 @@ public class JDBC {
        String sql;
        sql = "SELECT * FROM Books WHERE BookTitle ='"+BookName+"'";
        ResultSet rs = stmt.executeQuery(sql);
+       if (rs.next() == false) {
+                System.out.println("Specified book does not exist!");
+       }
+       else{
        System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
        while (rs.next()) { 
 //Retrieve by column name 
@@ -231,9 +249,10 @@ public class JDBC {
             String numberOfPages = rs.getString("NumberPages");
         System.out.printf(displayFormat, 
                 dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+            }
         }
     }
-    public static void deleteSpecifiedBooks (Statement stmt) throws SQLException{
+    public static void deleteSpecifiedBooks () throws SQLException{
         
        Connection conn = DriverManager.getConnection(DB_URL); 
        System.out.println("Which book would you like to delete: "); 
@@ -270,9 +289,10 @@ public class JDBC {
        pstmt.setString(3, publisher);
        pstmt.setString(4, year);
        pstmt.setString(5, page);
-       pstmt.executeUpdate();
+       
+       int check = pstmt.executeUpdate();
     }
-    public static void insertPublisher(Statement stmt) throws SQLException
+    public static void insertPublisher() throws SQLException
     {
         Connection conn = DriverManager.getConnection(DB_URL);
         
