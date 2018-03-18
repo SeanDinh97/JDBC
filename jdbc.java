@@ -45,7 +45,8 @@ public class JDBC {
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
-            System.out.println("Functions for this database\n"
+            Boolean quit = true;
+            String Menu = ("Functions for this database\n"
                 + "1) List all writing groups\n"
                 + "2) List all the data for a group specified by the user\n"
                 + "3) List all publishers\n"
@@ -57,6 +58,9 @@ public class JDBC {
                 + "9) Delete a book\n"
                 + "10) Exit\n"
                 + "Enter your choice");
+            while(quit)
+            {
+            System.out.println(Menu);
             int input = in.nextInt();
             if (input == 1) {
                 listWritingGroups(stmt);
@@ -90,7 +94,7 @@ public class JDBC {
             }
             else {
                 System.out.println("Invalid input");
-            }
+            }}
             
             stmt.close();
             conn.close();
