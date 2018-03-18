@@ -266,14 +266,16 @@ public class JDBC {
         Connection conn = DriverManager.getConnection(DB_URL);
         
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter the publisher name:");
+        System.out.println("Enter the publisher name: ");
         String pName = in.nextLine();
-        System.out.println("Enter the publisher address:");
+        System.out.println("Enter the publisher address: ");
         String pAddress = in.nextLine();
-        System.out.println("Enter the publisher phone:");
+        System.out.println("Enter the publisher phone: ");
         String pPhone = in.nextLine();
-        System.out.println("Enter the publisher email:");
+        System.out.println("Enter the publisher email: ");
         String pEmail = in.nextLine();
+        System.out.println("Which publisher would you like to replace: ");
+        String pReplace = in.nextLine();
      
 
        String sql;
@@ -286,5 +288,12 @@ public class JDBC {
        pstmt.setString(3, pPhone);
        pstmt.setString(4, pEmail);
        pstmt.executeUpdate();
+       
+       String sql2;
+       sql2 = "UPDATE Books SET PublisherName = ? WHERE PublisherName = ?";
+       PreparedStatement pstmt2 = conn.prepareStatement(sql2);
+       pstmt2.setString(1, pName);
+       pstmt2.setString(2, pReplace);
+       pstmt2.executeUpdate();
     }
 }//end FirstExample}
