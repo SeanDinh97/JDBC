@@ -15,13 +15,14 @@ CREATE TABLE Publishers (
     PublisherEmail varchar (100),
     CONSTRAINT Publishers_pk PRIMARY KEY (PublisherName)
 );
+
 --Table structure of table Books
 CREATE TABLE Books (
     GroupName varchar(100) NOT NULL,
     BookTitle varchar(100)NOT NULL,
     PublisherName varchar (100) NOT NULL,
     YearPublished varchar (4),
-    NumberPages   int NOT NULL,
+    NumberPages   varchar (4),
     CONSTRAINT Books_pk PRIMARY KEY (GroupName, BookTitle),
     CONSTRAINT Books_fk FOREIGN KEY (GroupName) REFERENCES WritingGroups (GroupName),
     CONSTRAINT Books_fk2 FOREIGN KEY (PublisherName) REFERENCES Publishers (PublisherName)
@@ -58,22 +59,22 @@ INSERT INTO Publishers (PublisherName, PublisherAddress, PublisherPhone, Publish
 
 --Data for the table Books
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Los Angeles Writing Group','Throne Games','Lion Publishing','2011',523);
+('Los Angeles Writing Group','Throne Games','Lion Publishing','2011','523');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Santa Monica Writing Group','History of Airplanes','Bear Corporation','2017',356);
+('Santa Monica Writing Group','History of Airplanes','Bear Corporation','2017','356');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Los Angeles Writing Group','Dr. Robot','Lion Publishing','2013',201);
+('Los Angeles Writing Group','Dr. Robot','Lion Publishing','2013','201');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Garden Grove Writing Group','Love','Turtle Company','2015',236);
+('Garden Grove Writing Group','Love','Turtle Company','2015','236');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Long Beach Writing Group','Monster 2','Koala Pages','2018',278);
+('Long Beach Writing Group','Monster 2','Koala Pages','2018','278');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Santa Ana Writing Group','Cabin 4','Owl Press','2007',270);
+('Santa Ana Writing Group','Cabin 4','Owl Press','2007','270');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Los Angeles Writing Group','East World','Koala Pages','2011',369);
+('Los Angeles Writing Group','East World','Koala Pages','2011','369');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Fullerton Writing Group','The Room','Owl Press','2005',197);
+('Fullerton Writing Group','The Room','Owl Press','2005','197');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Santa Ana Writing Group','Night','Bumblebee Books','2009',237);
+('Santa Ana Writing Group','Night','Bumblebee Books','2009','237');
 INSERT INTO Books (GroupName, BookTitle, PublisherName, YearPublished, NumberPages) VALUES
-('Long Beach Writing Group','Monster','Koala Pages','2014',298);
+('Long Beach Writing Group','Monster','Koala Pages','2014','298');

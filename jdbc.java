@@ -8,13 +8,6 @@ import java.util.Scanner;
  * @author Mimi Opkins with some tweaking from Dave Brown
  */
 public class JDBC {
-    //  Database credentials
-    //This is the specification for the printout that I'm doing:
-    //each % denotes the start of a new field.
-    //The - denotes left justification.
-    //The number indicates how wide to make the field.
-    //The "s" denotes that it's a string.  All of our output in this test are 
-    //strings, but that won't always be the case.
     static final String displayFormat="%-35s%-50s%-25s%-25s\n";
 // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
@@ -33,6 +26,7 @@ public class JDBC {
             return input;
     }
     
+
      public static void main(String[] args) throws SQLException {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
@@ -63,6 +57,7 @@ public class JDBC {
                 + "8) Insert a new publisher\n"
                 + "9) Delete a book\n"
                 + "10) Quit\n"
+
                 + "Enter your choice");
             while(quit)
             {
@@ -98,6 +93,7 @@ public class JDBC {
             else if (input == 10) {
                 quit = false;
             }
+
             else {
                 System.out.println("Invalid input");
             }}
@@ -145,6 +141,7 @@ public class JDBC {
                         dispNull(groupName));
         }
             System.out.println("");
+
     }
     public static void listPublishers (Statement stmt) throws SQLException{
         String sql; 
@@ -161,6 +158,7 @@ public class JDBC {
                 dispNull(publisherName));
         }
         System.out.println("");
+
     }
     public static void listBooks (Statement stmt) throws SQLException{
         String sql; 
@@ -177,6 +175,7 @@ public class JDBC {
         System.out.printf("%-25s\n", 
                  dispNull(bookTitle));
         }
+
         System.out.println("");
     }
    public static void listSpecifiedWritingGroups () throws SQLException{
@@ -195,6 +194,7 @@ public class JDBC {
        boolean exist = rs.next();
        
        System.out.println("");
+
        if (exist == false) {
                 System.out.println("Specified group does not exist!");
        }
@@ -214,13 +214,16 @@ public class JDBC {
                         dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
                 exist = rs.next();
                         }
+
        System.out.println("\nPress Enter to continue");
        in.nextLine();
+
        }
     }
 
     public static void listSpecifiedBooks () throws SQLException{
       
+
        Connection conn = DriverManager.getConnection(DB_URL);
        Statement stmt = conn.createStatement();
        System.out.println("Which book would you like to look up: \n"); 
@@ -228,6 +231,7 @@ public class JDBC {
        
        String BookName = in.nextLine();
        String sql;
+
        
        sql = "SELECT * FROM Books WHERE BookTitle = ?";
        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -237,6 +241,7 @@ public class JDBC {
        boolean exist = rs.next();
        
        System.out.println("");
+
        if (exist == false) {
                 System.out.println("Specified book does not exist!");
        }
@@ -253,8 +258,10 @@ public class JDBC {
                 dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
         exist = rs.next();
             }
+
        System.out.println("\nPress Enter to continue");
        in.nextLine();
+
         }
     }
         public static void listSpecifiedPublishers () throws SQLException{
