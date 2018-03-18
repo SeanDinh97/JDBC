@@ -80,13 +80,13 @@ public class JDBC {
                 listSpecifiedBooks(stmt);
             }
             else if (input == 7) {
-                insertBook(stmt);
+                insertBook();
             }
             else if (input == 8) {
-                insertPublisher(stmt);
+                insertPublisher();
             }
             else if (input == 9) {
-                deleteSpecifiedBooks(stmt);
+                deleteSpecifiedBooks();
             }
             else {
                 System.out.println("Invalid input");
@@ -173,6 +173,10 @@ public class JDBC {
        String sql;
        sql = "SELECT * FROM WritingGroups WHERE GroupName ='"+Group+"'";
        ResultSet rs = stmt.executeQuery(sql);
+       if (rs.next() == false) {
+                System.out.println("Specified group does not exist!");
+       }
+       else{
        System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
        while (rs.next()) {
                 //Retrieve by column name
@@ -184,6 +188,7 @@ public class JDBC {
                 //Display values
                 System.out.printf(displayFormat, 
                         dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
+       }
         }
     }
     public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
@@ -192,6 +197,10 @@ public class JDBC {
         String sql; 
         sql = "SELECT * FROM Publishers WHERE PublisherName ='"+PublisherName+"'"; 
         ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next() == false) {
+                System.out.println("Specified publisher does not exist!");
+       }
+       else{
         System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
         while (rs.next()) { 
 //Retrieve by column name 
@@ -201,6 +210,7 @@ public class JDBC {
             String publisherEmail = rs.getString("PublisherEmail"); 
         System.out.printf(displayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+            }
         }
     }
     public static void listSpecifiedBooks (Statement stmt) throws SQLException{
@@ -210,6 +220,10 @@ public class JDBC {
        String sql;
        sql = "SELECT * FROM Books WHERE BookTitle ='"+BookName+"'";
        ResultSet rs = stmt.executeQuery(sql);
+       if (rs.next() == false) {
+                System.out.println("Specified book does not exist!");
+       }
+       else{
        System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
        while (rs.next()) { 
 //Retrieve by column name 
@@ -220,9 +234,10 @@ public class JDBC {
             String numberOfPages = rs.getString("NumberPages");
         System.out.printf(displayFormat, 
                 dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+            }
         }
     }
-    public static void deleteSpecifiedBooks (Statement stmt) throws SQLException{
+    public static void deleteSpecifiedBooks () throws SQLException{
         
        Connection conn = DriverManager.getConnection(DB_URL); 
        System.out.println("Which book would you like to delete: "); 
@@ -233,7 +248,7 @@ public class JDBC {
        pstmt.setString(1, BookName);
        pstmt.executeUpdate();
     }
-    public static void insertBook(Statement stmt) throws SQLException
+    public static void insertBook() throws SQLException
     {
         Connection conn = DriverManager.getConnection(DB_URL);
         
@@ -259,9 +274,10 @@ public class JDBC {
        pstmt.setString(3, publisher);
        pstmt.setString(4, year);
        pstmt.setString(5, page);
-       pstmt.executeUpdate();
+       
+       int check = pstmt.executeUpdate();
     }
-    public static void insertPublisher(Statement stmt) throws SQLException
+    public static void insertPublisher() throws SQLException
     {
         Connection conn = DriverManager.getConnection(DB_URL);
         
