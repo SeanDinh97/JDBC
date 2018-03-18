@@ -41,6 +41,15 @@ public class JDBC {
         Connection conn = null; //initialize the connection
         Statement stmt = null;  //initialize the statement that we're using
         try {
+            System.out.println("Functions for this database\n"
+                + "1) List all writing groups\n"
+                + "2) List all the data for a group specified by the user\n"
+                + "3) List all publishers\n"
+                + "4) List all the data for a publisher specified by the user\n"
+                + "5) List all book titles\n"
+                + "6) List all the data for a book specified by the user\n"
+                + "7) Insert a new book
+                + "Enter your choice");
             //STEP 2: Register JDBC driver
             Class.forName("org.apache.derby.jdbc.ClientDriver");
 
