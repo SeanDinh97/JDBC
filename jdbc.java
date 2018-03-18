@@ -71,13 +71,13 @@ public class JDBC {
                 listPublishers(stmt);
             }
             else if (input == 4) {
-                listSpecifiedPublishers(stmt);
+                listSpecifiedPublishers();
             }
             else if (input == 5) {
                 listBooks(stmt);
             }
             else if (input == 6) {
-                listSpecifiedBooks(stmt);
+                listSpecifiedBooks();
             }
             else if (input == 7) {
                 insertBook();
@@ -201,7 +201,7 @@ public class JDBC {
        }
     }
 
-    public static void listSpecifiedBooks (Statement stmt) throws SQLException{
+    public static void listSpecifiedBooks () throws SQLException{
       
        System.out.println("Which book would you like to look up: "); 
        String BookName = in.nextLine();
@@ -232,18 +232,28 @@ public class JDBC {
             }
         }
     }
-        public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
-        System.out.println("Which publisher would you like to look up: "); 
+        public static void listSpecifiedPublishers () throws SQLException{
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement();
+        System.out.println("Which publisher would you like to look up: \n"); 
+        listPublishers(stmt);
         String PublisherName = in.nextLine();
         String sql; 
-        sql = "SELECT * FROM Publishers WHERE PublisherName ='"+PublisherName+"'"; 
-        ResultSet rs = stmt.executeQuery(sql);
-        if (rs.next() == false) {
+        
+        sql = "SELECT * FROM Publishers WHERE PublisherName =?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, PublisherName);
+        
+        ResultSet rs = pstmt.executeQuery();
+        boolean exist = rs.next();
+        
+        System.out.println("");
+        if (exist== false) {
                 System.out.println("Specified publisher does not exist!");
        }
        else{
         System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
-        while (rs.next()) { 
+        while (exist) { 
 //Retrieve by column name 
             String publisherName = rs.getString("PublisherName"); 
             String publisherAddress = rs.getString("PublisherAddress"); 
@@ -251,7 +261,10 @@ public class JDBC {
             String publisherEmail = rs.getString("PublisherEmail"); 
         System.out.printf(displayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+        exist = rs.next();
             }
+        System.out.println("\nPress Enter to continue");
+        in.nextLine();
         }
     }
     public static void deleteSpecifiedBooks () throws SQLException{
