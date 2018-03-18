@@ -65,7 +65,7 @@ public class JDBC {
                 listWritingGroups(stmt);
             }
             else if (input == 2) {
-                listSpecifiedWritingGroups(stmt);
+                listSpecifiedWritingGroups();
             }
             else if (input == 3) {
                 listPublishers(stmt);
@@ -166,19 +166,27 @@ public class JDBC {
                  dispNull(bookTitle));
         }
     }
-    public static void listSpecifiedWritingGroups (Statement stmt) throws SQLException{
+   public static void listSpecifiedWritingGroups () throws SQLException{
       
        System.out.println("Which group would you like to look up: "); 
        String Group = in.nextLine();
        String sql;
-       sql = "SELECT * FROM WritingGroups WHERE GroupName ='"+Group+"'";
-       ResultSet rs = stmt.executeQuery(sql);
-       if (rs.next() == false) {
+       Connection conn = DriverManager.getConnection(DB_URL);
+       
+       sql = "SELECT * FROM WritingGroups WHERE GroupName =?";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, Group);
+       
+       ResultSet rs = pstmt.executeQuery();
+       boolean exist = rs.next();
+       if (exist == false) {
                 System.out.println("Specified group does not exist!");
        }
        else{
+       
        System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
-       while (rs.next()) {
+       //System.out.println(rs.next());
+       while (exist) {
                 //Retrieve by column name
                 String groupName = rs.getString("GroupName");
                 String headWriter = rs.getString("HeadWriter");
@@ -188,10 +196,43 @@ public class JDBC {
                 //Display values
                 System.out.printf(displayFormat, 
                         dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
+                exist = rs.next();
+                        }
        }
+    }
+
+    public static void listSpecifiedBooks (Statement stmt) throws SQLException{
+      
+       System.out.println("Which book would you like to look up: "); 
+       String BookName = in.nextLine();
+       String sql;
+       Connection conn = DriverManager.getConnection(DB_URL);
+       
+       sql = "SELECT * FROM Books WHERE BookTitle = ?";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, BookName);
+       
+       ResultSet rs = pstmt.executeQuery();
+       boolean exist = rs.next();
+       if (exist == false) {
+                System.out.println("Specified book does not exist!");
+       }
+       else{
+       System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
+       while (exist) { 
+//Retrieve by column name 
+            String groupName = rs.getString("GroupName"); 
+            String bookTitle = rs.getString("BookTitle"); 
+            String publisherName = rs.getString("PublisherName"); 
+            String yearPublished = rs.getString("YearPublished");
+            String numberOfPages = rs.getString("NumberPages");
+        System.out.printf(displayFormat, 
+                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+        exist = rs.next();
+            }
         }
     }
-    public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
+        public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
         System.out.println("Which publisher would you like to look up: "); 
         String PublisherName = in.nextLine();
         String sql; 
@@ -210,30 +251,6 @@ public class JDBC {
             String publisherEmail = rs.getString("PublisherEmail"); 
         System.out.printf(displayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
-            }
-        }
-    }
-    public static void listSpecifiedBooks (Statement stmt) throws SQLException{
-      
-       System.out.println("Which book would you like to look up: "); 
-       String BookName = in.nextLine();
-       String sql;
-       sql = "SELECT * FROM Books WHERE BookTitle ='"+BookName+"'";
-       ResultSet rs = stmt.executeQuery(sql);
-       if (rs.next() == false) {
-                System.out.println("Specified book does not exist!");
-       }
-       else{
-       System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
-       while (rs.next()) { 
-//Retrieve by column name 
-            String groupName = rs.getString("GroupName"); 
-            String bookTitle = rs.getString("BookTitle"); 
-            String publisherName = rs.getString("PublisherName"); 
-            String yearPublished = rs.getString("YearPublished");
-            String numberOfPages = rs.getString("NumberPages");
-        System.out.printf(displayFormat, 
-                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
             }
         }
     }
