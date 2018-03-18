@@ -15,7 +15,7 @@ public class JDBC {
     //The number indicates how wide to make the field.
     //The "s" denotes that it's a string.  All of our output in this test are 
     //strings, but that won't always be the case.
-    static final String displayFormat="%-35s%-25s%-15s%-15s\n";
+    static final String displayFormat="%-35s%-50s%-25s%-25s\n";
 // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/CECS_323_JDBC";
@@ -33,7 +33,7 @@ public class JDBC {
             return input;
     }
     
-     public static void main(String[] args) throws SQLException {
+      public static void main(String[] args) throws SQLException {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
         //remove that from the connection string.
@@ -83,7 +83,7 @@ public class JDBC {
                 listBooks(stmt);
             }
             else if (input == 6) {
-                listSpecifiedBooks(stmt);
+                listSpecifiedBooks();
             }
             else if (input == 7) {
                 insertBook();
@@ -172,7 +172,7 @@ public class JDBC {
                  dispNull(bookTitle));
         }
     }
-    public static void listSpecifiedWritingGroups () throws SQLException{
+   public static void listSpecifiedWritingGroups () throws SQLException{
       
        System.out.println("Which group would you like to look up: "); 
        String Group = in.nextLine();
@@ -206,7 +206,39 @@ public class JDBC {
                         }
        }
     }
-    public static void listSpecifiedPublishers () throws SQLException{
+
+    public static void listSpecifiedBooks () throws SQLException{
+      
+       System.out.println("Which book would you like to look up: "); 
+       String BookName = in.nextLine();
+       String sql;
+       Connection conn = DriverManager.getConnection(DB_URL);
+       
+       sql = "SELECT * FROM Books WHERE BookTitle = ?";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, BookName);
+       
+       ResultSet rs = pstmt.executeQuery();
+       boolean exist = rs.next();
+       if (exist == false) {
+                System.out.println("Specified book does not exist!");
+       }
+       else{
+       System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
+       while (exist) { 
+//Retrieve by column name 
+            String groupName = rs.getString("GroupName"); 
+            String bookTitle = rs.getString("BookTitle"); 
+            String publisherName = rs.getString("PublisherName"); 
+            String yearPublished = rs.getString("YearPublished");
+            String numberOfPages = rs.getString("NumberPages");
+        System.out.printf(displayFormat, 
+                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+        exist = rs.next();
+            }
+        }
+    }
+        public static void listSpecifiedPublishers () throws SQLException{
         System.out.println("Which publisher would you like to look up: "); 
         String PublisherName = in.nextLine();
         String sql; 
@@ -232,31 +264,6 @@ public class JDBC {
         System.out.printf(displayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
         exist = rs.next();
-            }
-        }
-    }
-    
-    public static void listSpecifiedBooks (Statement stmt) throws SQLException{
-      
-       System.out.println("Which book would you like to look up: "); 
-       String BookName = in.nextLine();
-       String sql;
-       sql = "SELECT * FROM Books WHERE BookTitle ='"+BookName+"'";
-       ResultSet rs = stmt.executeQuery(sql);
-       if (rs.next() == false) {
-                System.out.println("Specified book does not exist!");
-       }
-       else{
-       System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
-       while (rs.next()) { 
-//Retrieve by column name 
-            String groupName = rs.getString("GroupName"); 
-            String bookTitle = rs.getString("BookTitle"); 
-            String publisherName = rs.getString("PublisherName"); 
-            String yearPublished = rs.getString("YearPublished");
-            String numberOfPages = rs.getString("NumberPages");
-        System.out.printf(displayFormat, 
-                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
             }
         }
     }
