@@ -55,13 +55,43 @@ public class JDBC {
                 + "7) Insert a new book\n"
                 + "8) Insert a new publisher\n"
                 + "9) Delete a book\n"
+                + "10) Exit\n"
                 + "Enter your choice");
-            listWritingGroups(stmt);
-            listPublishers(stmt);
-            listBooks(stmt);
-            listSpecifiedPublishers(stmt);
-            listSpecifiedWritingGroups(stmt);
-            listSpecifiedBooks(stmt);
+            int input = in.nextInt();
+            if (input == 1) {
+                listWritingGroups(stmt);
+            }
+            else if (input == 2) {
+                listSpecifiedWritingGroups(stmt);
+            }
+            else if (input == 3) {
+                listPublishers(stmt);
+            }
+            else if (input == 4) {
+                listSpecifiedPublishers(stmt);
+            }
+            else if (input == 5) {
+                listBooks(stmt);
+            }
+            else if (input == 6) {
+                listSpecifiedBooks(stmt);
+            }
+            else if (input == 7) {
+                listSpecifiedBooks(stmt);
+            }
+            else if (input == 8) {
+                listSpecifiedBooks(stmt);
+            }
+            else if (input == 9) {
+                listSpecifiedBooks(stmt);
+            }
+            else if (input == 10) {
+                System.exit(0);
+            }
+            else {
+                System.out.println("Invalid input");
+            }
+            
             stmt.close();
             conn.close();
         } catch (SQLException se) {
