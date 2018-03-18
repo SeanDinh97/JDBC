@@ -33,7 +33,7 @@ public class JDBC {
             return input;
     }
     
-      public static void main(String[] args) throws SQLException {
+     public static void main(String[] args) throws SQLException {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
         //remove that from the connection string.
@@ -62,6 +62,7 @@ public class JDBC {
                 + "7) Insert a new book\n"
                 + "8) Insert a new publisher\n"
                 + "9) Delete a book\n"
+                + "10) Quit\n"
                 + "Enter your choice");
             while(quit)
             {
@@ -93,6 +94,9 @@ public class JDBC {
             }
             else if (input == 9) {
                 deleteSpecifiedBooks();
+            }
+            else if (input == 10) {
+                quit = false;
             }
             else {
                 System.out.println("Invalid input");
@@ -140,6 +144,7 @@ public class JDBC {
                 System.out.printf("%-25s\n", 
                         dispNull(groupName));
         }
+            System.out.println("");
     }
     public static void listPublishers (Statement stmt) throws SQLException{
         String sql; 
@@ -155,6 +160,7 @@ public class JDBC {
         System.out.printf("%-25s\n", 
                 dispNull(publisherName));
         }
+        System.out.println("");
     }
     public static void listBooks (Statement stmt) throws SQLException{
         String sql; 
@@ -171,20 +177,24 @@ public class JDBC {
         System.out.printf("%-25s\n", 
                  dispNull(bookTitle));
         }
+        System.out.println("");
     }
    public static void listSpecifiedWritingGroups () throws SQLException{
-      
-       System.out.println("Which group would you like to look up: "); 
-       String Group = in.nextLine();
-       String sql;
        Connection conn = DriverManager.getConnection(DB_URL);
+       Statement stmt = conn.createStatement();
+       String sql;
        
+       System.out.println("Which group would you like to look up: \n"); 
+       listWritingGroups(stmt);
+       
+       String Group = in.nextLine();
        sql = "SELECT * FROM WritingGroups WHERE GroupName =?";
        PreparedStatement pstmt = conn.prepareStatement(sql);
        pstmt.setString(1, Group);
-       
        ResultSet rs = pstmt.executeQuery();
        boolean exist = rs.next();
+       
+       System.out.println("");
        if (exist == false) {
                 System.out.println("Specified group does not exist!");
        }
@@ -204,15 +214,20 @@ public class JDBC {
                         dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
                 exist = rs.next();
                         }
+       System.out.println("\nPress Enter to continue");
+       in.nextLine();
        }
     }
 
     public static void listSpecifiedBooks () throws SQLException{
       
-       System.out.println("Which book would you like to look up: "); 
+       Connection conn = DriverManager.getConnection(DB_URL);
+       Statement stmt = conn.createStatement();
+       System.out.println("Which book would you like to look up: \n"); 
+       listBooks(stmt);
+       
        String BookName = in.nextLine();
        String sql;
-       Connection conn = DriverManager.getConnection(DB_URL);
        
        sql = "SELECT * FROM Books WHERE BookTitle = ?";
        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -220,6 +235,8 @@ public class JDBC {
        
        ResultSet rs = pstmt.executeQuery();
        boolean exist = rs.next();
+       
+       System.out.println("");
        if (exist == false) {
                 System.out.println("Specified book does not exist!");
        }
@@ -236,13 +253,17 @@ public class JDBC {
                 dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
         exist = rs.next();
             }
+       System.out.println("\nPress Enter to continue");
+       in.nextLine();
         }
     }
         public static void listSpecifiedPublishers () throws SQLException{
-        System.out.println("Which publisher would you like to look up: "); 
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement();
+        System.out.println("Which publisher would you like to look up: \n"); 
+        listPublishers(stmt);
         String PublisherName = in.nextLine();
         String sql; 
-        Connection conn = DriverManager.getConnection(DB_URL);
         
         sql = "SELECT * FROM Publishers WHERE PublisherName =?"; 
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -250,6 +271,8 @@ public class JDBC {
         
         ResultSet rs = pstmt.executeQuery();
         boolean exist = rs.next();
+        
+        System.out.println("");
         if (exist== false) {
                 System.out.println("Specified publisher does not exist!");
        }
@@ -265,6 +288,8 @@ public class JDBC {
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
         exist = rs.next();
             }
+        System.out.println("\nPress Enter to continue");
+        in.nextLine();
         }
     }
     public static void deleteSpecifiedBooks () throws SQLException{
