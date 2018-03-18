@@ -56,7 +56,6 @@ public class JDBC {
                 + "7) Insert a new book\n"
                 + "8) Insert a new publisher\n"
                 + "9) Delete a book\n"
-                + "10) Exit\n"
                 + "Enter your choice");
             while(quit)
             {
@@ -81,16 +80,13 @@ public class JDBC {
                 listSpecifiedBooks(stmt);
             }
             else if (input == 7) {
-                listSpecifiedBooks(stmt);
+                insertBook(stmt);
             }
             else if (input == 8) {
-                listSpecifiedBooks(stmt);
+                insertPublisher(stmt);
             }
             else if (input == 9) {
                 deleteSpecifiedBooks(stmt);
-            }
-            else if (input == 10) {
-                System.exit(0);
             }
             else {
                 System.out.println("Invalid input");
@@ -227,12 +223,77 @@ public class JDBC {
         }
     }
     public static void deleteSpecifiedBooks (Statement stmt) throws SQLException{
-      
+        
+       Connection conn = DriverManager.getConnection(DB_URL); 
        System.out.println("Which book would you like to delete: "); 
        String BookName = in.nextLine();
        String sql;
-       sql = "DELETE FROM Books WHERE BookTitle ='"+BookName+"'";
-       stmt.executeUpdate(sql);
+       sql = "DELETE FROM Books WHERE BookTitle = ?";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, BookName);
+       pstmt.executeUpdate();
+    }
+    public static void insertBook(Statement stmt) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the group name:");
+        String group = in.nextLine();
+        System.out.println("Enter the book title:");
+        String title = in.nextLine();
+        System.out.println("Enter the publisher name:");
+        String publisher = in.nextLine();
+        System.out.println("Enter the year published:");
+        String year = in.nextLine();
+        System.out.println("Enter the number of pages:");
+        String page = in.nextLine();
+
+       String sql;
        
+       sql = "INSERT INTO Books ( GroupName, BookTitle, PublisherName ,YearPublished, NumberPages) VALUES" + 
+               "(?,?,?,?,?)";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, group);
+       pstmt.setString(2, title);
+       pstmt.setString(3, publisher);
+       pstmt.setString(4, year);
+       pstmt.setString(5, page);
+       pstmt.executeUpdate();
+    }
+    public static void insertPublisher(Statement stmt) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the publisher name: ");
+        String pName = in.nextLine();
+        System.out.println("Enter the publisher address: ");
+        String pAddress = in.nextLine();
+        System.out.println("Enter the publisher phone: ");
+        String pPhone = in.nextLine();
+        System.out.println("Enter the publisher email: ");
+        String pEmail = in.nextLine();
+        System.out.println("Which publisher would you like to replace: ");
+        String pReplace = in.nextLine();
+     
+
+       String sql;
+       
+       sql = "INSERT INTO Publishers ( PublisherName ,PublisherAddress, PublisherPhone, PublisherEmail) VALUES" + 
+               "(?,?,?,?)";
+       PreparedStatement pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1, pName);
+       pstmt.setString(2, pAddress);
+       pstmt.setString(3, pPhone);
+       pstmt.setString(4, pEmail);
+       pstmt.executeUpdate();
+       
+       String sql2;
+       sql2 = "UPDATE Books SET PublisherName = ? WHERE PublisherName = ?";
+       PreparedStatement pstmt2 = conn.prepareStatement(sql2);
+       pstmt2.setString(1, pName);
+       pstmt2.setString(2, pReplace);
+       pstmt2.executeUpdate();
     }
 }//end FirstExample}
