@@ -90,50 +90,50 @@ public class JDBC {
     }//end main
     public static void listWritingGroups (Statement stmt) throws SQLException{
        String sql;
-            sql = "SELECT GroupName, HeadWriter, YearFormed, Subject FROM WritingGroups";
+            sql = "SELECT GroupName FROM WritingGroups";
             ResultSet rs = stmt.executeQuery(sql);
-        System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
+        System.out.printf("%-25s\n", "Group Name");
             while (rs.next()) {
                 //Retrieve by column name
                 String groupName = rs.getString("GroupName");
-                String headWriter = rs.getString("HeadWriter");
-                String yearFormed = rs.getString("YearFormed");
-                String subject = rs.getString("Subject");
+                //String headWriter = rs.getString("HeadWriter");
+                //String yearFormed = rs.getString("YearFormed");
+                //String subject = rs.getString("Subject");
 
                 //Display values
-                System.out.printf(displayFormat, 
-                        dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
+                System.out.printf("%-25s\n", 
+                        dispNull(groupName));
         }
     }
     public static void listPublishers (Statement stmt) throws SQLException{
         String sql; 
-        sql = "SELECT PublisherName, PublisherAddress, PublisherPhone, PublisherEmail FROM Publishers"; 
+        sql = "SELECT PublisherName FROM Publishers"; 
         ResultSet rs = stmt.executeQuery(sql);
-        System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
+        System.out.printf("%-25s\n", "Publisher Name"); 
         while (rs.next()) { 
 //Retrieve by column name 
             String publisherName = rs.getString("PublisherName"); 
-            String publisherAddress = rs.getString("PublisherAddress"); 
-            String publisherPhone = rs.getString("PublisherPhone"); 
-            String publisherEmail = rs.getString("PublisherEmail"); 
-        System.out.printf(displayFormat, 
-                dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+            //String publisherAddress = rs.getString("PublisherAddress"); 
+            //String publisherPhone = rs.getString("PublisherPhone"); 
+            //String publisherEmail = rs.getString("PublisherEmail"); 
+        System.out.printf("%-25s\n", 
+                dispNull(publisherName));
         }
     }
     public static void listBooks (Statement stmt) throws SQLException{
         String sql; 
-        sql =  "SELECT GroupName, BookTitle, PublisherName, YearPublished, NumberPages FROM Books";; 
+        sql =  "SELECT BookTitle FROM Books";; 
         ResultSet rs = stmt.executeQuery(sql);
-        System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
+        System.out.printf("%-25s\n",  "Book Title"); 
         while (rs.next()) { 
 //Retrieve by column name 
-            String groupName = rs.getString("GroupName"); 
+            //String groupName = rs.getString("GroupName"); 
             String bookTitle = rs.getString("BookTitle"); 
-            String publisherName = rs.getString("PublisherName"); 
-            String yearPublished = rs.getString("YearPublished");
-            String numberOfPages = rs.getString("NumberPages");
-        System.out.printf(displayFormat, 
-                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+            //String publisherName = rs.getString("PublisherName"); 
+            //String yearPublished = rs.getString("YearPublished");
+            //String numberOfPages = rs.getString("NumberPages");
+        System.out.printf("%-25s\n", 
+                 dispNull(bookTitle));
         }
     }
     public static void listSpecifiedWritingGroups (Statement stmt) throws SQLException{
