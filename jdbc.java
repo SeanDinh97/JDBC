@@ -48,7 +48,7 @@ public class JDBC {
                 + "4) List all the data for a publisher specified by the user\n"
                 + "5) List all book titles\n"
                 + "6) List all the data for a book specified by the user\n"
-                + "7) Insert a new book
+                + "7) Insert a new book\n"
                 + "Enter your choice");
             //STEP 2: Register JDBC driver
             Class.forName("org.apache.derby.jdbc.ClientDriver");
