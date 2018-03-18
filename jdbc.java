@@ -71,7 +71,7 @@ public class JDBC {
                 listWritingGroups(stmt);
             }
             else if (input == 2) {
-                listSpecifiedWritingGroups(stmt);
+                listSpecifiedWritingGroups();
             }
             else if (input == 3) {
                 listPublishers(stmt);
