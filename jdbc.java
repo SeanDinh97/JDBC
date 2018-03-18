@@ -206,18 +206,24 @@ public class JDBC {
                         }
        }
     }
-    public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
+    public static void listSpecifiedPublishers () throws SQLException{
         System.out.println("Which publisher would you like to look up: "); 
         String PublisherName = in.nextLine();
         String sql; 
-        sql = "SELECT * FROM Publishers WHERE PublisherName ='"+PublisherName+"'"; 
-        ResultSet rs = stmt.executeQuery(sql);
-        if (rs.next() == false) {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        
+        sql = "SELECT * FROM Publishers WHERE PublisherName =?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, PublisherName);
+        
+        ResultSet rs = pstmt.executeQuery();
+        boolean exist = rs.next();
+        if (exist== false) {
                 System.out.println("Specified publisher does not exist!");
        }
        else{
         System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
-        while (rs.next()) { 
+        while (exist) { 
 //Retrieve by column name 
             String publisherName = rs.getString("PublisherName"); 
             String publisherAddress = rs.getString("PublisherAddress"); 
@@ -225,9 +231,11 @@ public class JDBC {
             String publisherEmail = rs.getString("PublisherEmail"); 
         System.out.printf(displayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+        exist = rs.next();
             }
         }
     }
+    
     public static void listSpecifiedBooks (Statement stmt) throws SQLException{
       
        System.out.println("Which book would you like to look up: "); 
