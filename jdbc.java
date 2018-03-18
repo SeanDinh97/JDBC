@@ -8,14 +8,8 @@ import java.util.Scanner;
  * @author Mimi Opkins with some tweaking from Dave Brown
  */
 public class JDBC {
-    //  Database credentials
-    //This is the specification for the printout that I'm doing:
-    //each % denotes the start of a new field.
-    //The - denotes left justification.
-    //The number indicates how wide to make the field.
-    //The "s" denotes that it's a string.  All of our output in this test are 
-    //strings, but that won't always be the case.
-    static final String displayFormat="%-35s%-25s%-15s%-15s\n";
+    static Scanner in = new Scanner(System.in);
+    static final String displayFormat="%-35s%-50s%-25s%-25s\n";
 // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/CECS_323_JDBC";
@@ -33,7 +27,7 @@ public class JDBC {
             return input;
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
         //remove that from the connection string.
@@ -51,25 +45,12 @@ public class JDBC {
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT GroupName, HeadWriter, YearFormed, Subject FROM WritingGroups";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            //STEP 5: Extract data from result set
-            System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
-            while (rs.next()) {
-                //Retrieve by column name
-                String groupName = rs.getString("GroupName");
-                String headWriter = rs.getString("HeadWriter");
-                String yearFormed = rs.getString("YearFormed");
-                String subject = rs.getString("Subject");
-
-                //Display values
-                System.out.printf(displayFormat, 
-                        dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
-            }
-            //STEP 6: Clean-up environment
-            rs.close();
+            listWritingGroups(stmt);
+            listPublishers(stmt);
+            listBooks(stmt);
+            listSpecifiedPublishers(stmt);
+            listSpecifiedWritingGroups(stmt);
+            listSpecifiedBooks(stmt);
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -96,4 +77,108 @@ public class JDBC {
         }//end try
         System.out.println("Goodbye!");
     }//end main
+    public static void listWritingGroups (Statement stmt) throws SQLException{
+       String sql;
+            sql = "SELECT GroupName, HeadWriter, YearFormed, Subject FROM WritingGroups";
+            ResultSet rs = stmt.executeQuery(sql);
+        System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
+            while (rs.next()) {
+                //Retrieve by column name
+                String groupName = rs.getString("GroupName");
+                String headWriter = rs.getString("HeadWriter");
+                String yearFormed = rs.getString("YearFormed");
+                String subject = rs.getString("Subject");
+
+                //Display values
+                System.out.printf(displayFormat, 
+                        dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
+        }
+    }
+    public static void listPublishers (Statement stmt) throws SQLException{
+        String sql; 
+        sql = "SELECT PublisherName, PublisherAddress, PublisherPhone, PublisherEmail FROM Publishers"; 
+        ResultSet rs = stmt.executeQuery(sql);
+        System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
+        while (rs.next()) { 
+//Retrieve by column name 
+            String publisherName = rs.getString("PublisherName"); 
+            String publisherAddress = rs.getString("PublisherAddress"); 
+            String publisherPhone = rs.getString("PublisherPhone"); 
+            String publisherEmail = rs.getString("PublisherEmail"); 
+        System.out.printf(displayFormat, 
+                dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+        }
+    }
+    public static void listBooks (Statement stmt) throws SQLException{
+        String sql; 
+        sql =  "SELECT GroupName, BookTitle, PublisherName, YearPublished, NumberPages FROM Books";; 
+        ResultSet rs = stmt.executeQuery(sql);
+        System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
+        while (rs.next()) { 
+//Retrieve by column name 
+            String groupName = rs.getString("GroupName"); 
+            String bookTitle = rs.getString("BookTitle"); 
+            String publisherName = rs.getString("PublisherName"); 
+            String yearPublished = rs.getString("YearPublished");
+            String numberOfPages = rs.getString("NumberPages");
+        System.out.printf(displayFormat, 
+                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+        }
+    }
+    public static void listSpecifiedWritingGroups (Statement stmt) throws SQLException{
+      
+       System.out.println("Which group would you like to look up: "); 
+       String Group = in.nextLine();
+       String sql;
+       sql = "SELECT * FROM WritingGroups WHERE GroupName ='"+Group+"'";
+       ResultSet rs = stmt.executeQuery(sql);
+       System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
+       while (rs.next()) {
+                //Retrieve by column name
+                String groupName = rs.getString("GroupName");
+                String headWriter = rs.getString("HeadWriter");
+                String yearFormed = rs.getString("YearFormed");
+                String subject = rs.getString("Subject");
+
+                //Display values
+                System.out.printf(displayFormat, 
+                        dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
+        }
+    }
+    public static void listSpecifiedPublishers (Statement stmt) throws SQLException{
+        System.out.println("Which publisher would you like to look up: "); 
+        String PublisherName = in.nextLine();
+        String sql; 
+        sql = "SELECT * FROM Publishers WHERE PublisherName ='"+PublisherName+"'"; 
+        ResultSet rs = stmt.executeQuery(sql);
+        System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
+        while (rs.next()) { 
+//Retrieve by column name 
+            String publisherName = rs.getString("PublisherName"); 
+            String publisherAddress = rs.getString("PublisherAddress"); 
+            String publisherPhone = rs.getString("PublisherPhone"); 
+            String publisherEmail = rs.getString("PublisherEmail"); 
+        System.out.printf(displayFormat, 
+                dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
+        }
+    }
+    public static void listSpecifiedBooks (Statement stmt) throws SQLException{
+      
+       System.out.println("Which book would you like to look up: "); 
+       String BookName = in.nextLine();
+       String sql;
+       sql = "SELECT * FROM Books WHERE BookTitle ='"+BookName+"'";
+       ResultSet rs = stmt.executeQuery(sql);
+       System.out.printf(displayFormat, "Group Name", "Book Title", "Publisher Name" ,"Year Published", "Number of Pages"); 
+       while (rs.next()) { 
+//Retrieve by column name 
+            String groupName = rs.getString("GroupName"); 
+            String bookTitle = rs.getString("BookTitle"); 
+            String publisherName = rs.getString("PublisherName"); 
+            String yearPublished = rs.getString("YearPublished");
+            String numberOfPages = rs.getString("NumberPages");
+        System.out.printf(displayFormat, 
+                dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
+        }
+    }
 }//end FirstExample}
