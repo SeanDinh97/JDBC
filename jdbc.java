@@ -87,7 +87,7 @@ public class JDBC {
                 listSpecifiedBooks(stmt);
             }
             else if (input == 9) {
-                listSpecifiedBooks(stmt);
+                deleteSpecifiedBooks(stmt);
             }
             else if (input == 10) {
                 System.exit(0);
@@ -225,5 +225,14 @@ public class JDBC {
         System.out.printf(displayFormat, 
                 dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
         }
+    }
+    public static void deleteSpecifiedBooks (Statement stmt) throws SQLException{
+      
+       System.out.println("Which book would you like to delete: "); 
+       String BookName = in.nextLine();
+       String sql;
+       sql = "DELETE FROM Books WHERE BookTitle ='"+BookName+"'";
+       stmt.executeUpdate(sql);
+       
     }
 }//end FirstExample}
