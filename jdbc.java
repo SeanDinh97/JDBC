@@ -288,14 +288,24 @@ public class JDBC {
     }
     public static void deleteSpecifiedBooks () throws SQLException{
         
-       Connection conn = DriverManager.getConnection(DB_URL); 
+       Connection conn = DriverManager.getConnection(DB_URL);
+       Statement stmt = conn.createStatement();
        System.out.println("Which book would you like to delete: "); 
+       listBooks(stmt);
        String BookName = in.nextLine();
        String sql;
        sql = "DELETE FROM Books WHERE BookTitle = ?";
        PreparedStatement pstmt = conn.prepareStatement(sql);
        pstmt.setString(1, BookName);
-       pstmt.executeUpdate();
+       int exist = pstmt.executeUpdate();
+       if (exist <= 0){
+           System.out.println("Specified book does not exist!");
+       }
+       else {
+           System.out.println("\nBook has been deleted");
+           System.out.println("\nPress Enter to continue");
+           in.nextLine();
+       }
     }
     public static void insertBook() throws SQLException
     {
