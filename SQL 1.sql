@@ -25,10 +25,12 @@ CREATE TABLE Books (
     NumberPages   varchar (4),
     CONSTRAINT Books_pk PRIMARY KEY (GroupName, BookTitle),
     CONSTRAINT Books_fk FOREIGN KEY (GroupName) REFERENCES WritingGroups (GroupName),
-    CONSTRAINT Books_fk2 FOREIGN KEY (PublisherName) REFERENCES Publishers (PublisherName)
+    CONSTRAINT Books_fk2 FOREIGN KEY (PublisherName) REFERENCES Publishers (PublisherName),
+    CONSTRAINT Books_uk01 UNIQUE (BookTitle,PublisherName)
     --CONSTRAINT Books_uk UNIQUE (BookTitle),
     --CONSTRAINT Books_uk1 UNIQUE (PublisherName)
 );
+Drop table books;
 
 --Data for the table WritingGroups
 
