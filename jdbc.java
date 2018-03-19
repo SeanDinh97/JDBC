@@ -303,13 +303,23 @@ public class JDBC {
         String page = in.nextLine();
 
        String sql;
-  
-       if(conflictCheck(group,title) || conflictCheck2(title, publisher))
+       if(!(groupCheck(group)&&publisherCheck(publisher)))
+       {
+           System.out.println(!groupCheck(group)
+                   ?"The writing group does not exist":"");
+           System.out.println(!publisherCheck(publisher)
+                   ?"The publisher does not exist":"");
+           System.out.println("Please try again\nPress Enter to continue");
+           in.nextLine();
+       }
+       else if(conflictCheck(group,title) || conflictCheck2(title, publisher))
        {
            System.out.println(conflictCheck(group,title) 
-                   ?"Duplicated book title in the writing group":null);
+                   ?"Duplicated book title in the writing group":"");
            System.out.println(conflictCheck2(title,publisher) 
-                   ?"Duplicated book title in the publisher group":null);
+                   ?"Duplicated book title in the publisher group":"");
+           System.out.println("Please try again\nPress Enter to continue");
+           in.nextLine();
        }
        else
        {
@@ -321,7 +331,7 @@ public class JDBC {
        pstmt.setString(3, publisher);
        pstmt.setString(4, year);
        pstmt.setString(5, page);
-
+       
        pstmt.executeUpdate();
        }
     }
@@ -370,7 +380,6 @@ public class JDBC {
     public static boolean conflictCheck(String g, String b) throws SQLException
     {
         Connection conn = DriverManager.getConnection(DB_URL);
-        Statement stmt = conn.createStatement(); 
         String sql; 
 
         sql = "SELECT * FROM Books WHERE GroupName = ? AND BookTitle = ?"; 
@@ -384,8 +393,7 @@ public class JDBC {
     }
     public static boolean conflictCheck2(String b, String p) throws SQLException
     {
-        Connection conn = DriverManager.getConnection(DB_URL);
-        Statement stmt = conn.createStatement(); 
+        Connection conn = DriverManager.getConnection(DB_URL); 
         String sql; 
 
         sql = "SELECT * FROM Books WHERE BookTitle = ? AND PublisherName = ?"; 
@@ -400,7 +408,6 @@ public class JDBC {
     public static boolean conflictCheck3(String p) throws SQLException
     {
         Connection conn = DriverManager.getConnection(DB_URL);
-        Statement stmt = conn.createStatement(); 
         String sql; 
 
         sql = "SELECT PublisherName FROM Publishers WHERE PublisherName = ?"; 
@@ -410,6 +417,30 @@ public class JDBC {
 
         ResultSet rs = pstmt.executeQuery();
         
+        return rs.next();
+    }
+    public static boolean groupCheck(String g) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        String sql; 
+        
+        sql = "SELECT * FROM WritingGroups  WHERE GroupName =?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, g);
+        
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next();
+    }
+    public static boolean publisherCheck(String p) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        String sql; 
+        
+        sql = "SELECT * FROM Publishers  WHERE PublisherName =?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, p);
+        
+        ResultSet rs = pstmt.executeQuery();
         return rs.next();
     }
 }//end FirstExample}
