@@ -2,6 +2,7 @@ package cecs.pkg323.java.term.project;
 
 import java.sql.*;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 /**
  *
@@ -127,7 +128,7 @@ public class JDBC {
        String sql;
             sql = "SELECT GroupName FROM WritingGroups";
             ResultSet rs = stmt.executeQuery(sql);
-        System.out.printf("\n%-25s\n", "Group Name");
+        System.out.printf("\n%-25s\n", "Group Name\n-------------------------");
             while (rs.next()) {
                 //Retrieve by column name
                 String groupName = rs.getString("GroupName");
@@ -145,7 +146,7 @@ public class JDBC {
         String sql; 
         sql = "SELECT PublisherName FROM Publishers"; 
         ResultSet rs = stmt.executeQuery(sql);
-        System.out.printf("\n%-25s\n", "Publisher Name"); 
+        System.out.printf("\n%-25s\n", "Publisher Name\n-------------------------"); 
         while (rs.next()) { 
 //Retrieve by column name 
             String publisherName = rs.getString("PublisherName"); 
@@ -161,7 +162,7 @@ public class JDBC {
         String sql; 
         sql =  "SELECT BookTitle FROM Books";; 
         ResultSet rs = stmt.executeQuery(sql);
-        System.out.printf("\n%-25s\n",  "Book Title"); 
+        System.out.printf("\n%-25s\n",  "Book Title\n-------------------------"); 
         while (rs.next()) { 
 //Retrieve by column name 
             //String groupName = rs.getString("GroupName"); 
@@ -308,7 +309,7 @@ public class JDBC {
            in.nextLine();
        }
     }
-    public static void insertBook() throws SQLException
+        public static void insertBook() throws SQLException
     {
         Connection conn = DriverManager.getConnection(DB_URL);
         Statement stmt = conn.createStatement();
@@ -420,6 +421,7 @@ public class JDBC {
        System.out.println("Publisher has been replaced");
        System.out.println("\nPress Enter to continue");
        in.nextLine();
+       
        }}
     }
     public static boolean conflictCheck(String g, String b) throws SQLException
