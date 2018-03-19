@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
  * @author Mimi Opkins with some tweaking from Dave Brown
  */
 public class JDBC {
-    static final String displayFormat="%-35s%-50s%-25s%-25s\n";
+    static final String displayFormat="%-35s%-20s%-25s%-25s\n";
 // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/CECS_323_JDBC";
