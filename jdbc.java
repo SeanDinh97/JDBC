@@ -410,6 +410,9 @@ public class JDBC {
        pstmt2.setString(1, pName);
        pstmt2.setString(2, pReplace);
        pstmt2.executeUpdate();
+       System.out.println("Publisher has been replaced");
+       System.out.println("\nPress Enter to continue");
+       in.nextLine();
        }}
     }
     public static boolean conflictCheck(String g, String b) throws SQLException
