@@ -48,7 +48,7 @@ public class JDBC {
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
             Boolean quit = true;
-            String Menu = ("Functions for this database\n"
+            String Menu = ("Functions for this database\n-------------------------\n"
                 + "1) List all writing groups\n"
                 + "2) List all the data for a group specified by the user\n"
                 + "3) List all publishers\n"
