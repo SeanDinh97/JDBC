@@ -308,7 +308,15 @@ public class JDBC {
        sql = "DELETE FROM Books WHERE BookTitle = ?";
        PreparedStatement pstmt = conn.prepareStatement(sql);
        pstmt.setString(1, BookName);
-       pstmt.executeUpdate();
+       int exist = pstmt.executeUpdate();
+       if (exist <= 0){
+           System.out.println("Specified book does not exist!");
+       }
+       else {
+           System.out.println("\nBook has been deleted");
+           System.out.println("\nPress Enter to continue");
+           in.nextLine();
+       }
     }
     public static void insertBook() throws SQLException
     {
