@@ -27,7 +27,7 @@ public class JDBC {
     }
     
 
-     public static void main(String[] args) throws SQLException {
+      public static void main(String[] args) throws SQLException {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
         //remove that from the connection string.
@@ -57,7 +57,6 @@ public class JDBC {
                 + "8) Insert a new publisher\n"
                 + "9) Delete a book\n"
                 + "10) Quit\n"
-
                 + "Enter your choice");
             while(quit)
             {
@@ -93,7 +92,6 @@ public class JDBC {
             else if (input == 10) {
                 quit = false;
             }
-
             else {
                 System.out.println("Invalid input");
             }}
@@ -141,7 +139,6 @@ public class JDBC {
                         dispNull(groupName));
         }
             System.out.println("");
-
     }
     public static void listPublishers (Statement stmt) throws SQLException{
         String sql; 
@@ -158,7 +155,6 @@ public class JDBC {
                 dispNull(publisherName));
         }
         System.out.println("");
-
     }
     public static void listBooks (Statement stmt) throws SQLException{
         String sql; 
@@ -175,7 +171,6 @@ public class JDBC {
         System.out.printf("%-25s\n", 
                  dispNull(bookTitle));
         }
-
         System.out.println("");
     }
    public static void listSpecifiedWritingGroups () throws SQLException{
@@ -194,7 +189,6 @@ public class JDBC {
        boolean exist = rs.next();
        
        System.out.println("");
-
        if (exist == false) {
                 System.out.println("Specified group does not exist!");
        }
@@ -214,16 +208,13 @@ public class JDBC {
                         dispNull(groupName), dispNull(headWriter), dispNull(yearFormed), dispNull(subject));
                 exist = rs.next();
                         }
-
        System.out.println("\nPress Enter to continue");
        in.nextLine();
-
        }
     }
 
     public static void listSpecifiedBooks () throws SQLException{
       
-
        Connection conn = DriverManager.getConnection(DB_URL);
        Statement stmt = conn.createStatement();
        System.out.println("Which book would you like to look up: \n"); 
@@ -231,7 +222,6 @@ public class JDBC {
        
        String BookName = in.nextLine();
        String sql;
-
        
        sql = "SELECT * FROM Books WHERE BookTitle = ?";
        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -241,7 +231,6 @@ public class JDBC {
        boolean exist = rs.next();
        
        System.out.println("");
-
        if (exist == false) {
                 System.out.println("Specified book does not exist!");
        }
@@ -258,10 +247,8 @@ public class JDBC {
                 dispNull(groupName), dispNull(bookTitle), dispNull(publisherName), dispNull(yearPublished), dispNull(numberOfPages));
         exist = rs.next();
             }
-
        System.out.println("\nPress Enter to continue");
        in.nextLine();
-
         }
     }
         public static void listSpecifiedPublishers () throws SQLException{
@@ -327,7 +314,26 @@ public class JDBC {
         String page = in.nextLine();
 
        String sql;
-       
+       if(!(groupCheck(group)&&publisherCheck(publisher)))
+       {
+           System.out.println(!groupCheck(group)
+                   ?"The writing group does not exist":"");
+           System.out.println(!publisherCheck(publisher)
+                   ?"The publisher does not exist":"");
+           System.out.println("Please try again\nPress Enter to continue");
+           in.nextLine();
+       }
+       else if(conflictCheck(group,title) || conflictCheck2(title, publisher))
+       {
+           System.out.println(conflictCheck(group,title) 
+                   ?"Duplicated book title in the writing group":"");
+           System.out.println(conflictCheck2(title,publisher) 
+                   ?"Duplicated book title in the publisher group":"");
+           System.out.println("Please try again\nPress Enter to continue");
+           in.nextLine();
+       }
+       else
+       {
        sql = "INSERT INTO Books ( GroupName, BookTitle, PublisherName ,YearPublished, NumberPages) VALUES" + 
                "(?,?,?,?,?)";
        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -337,7 +343,8 @@ public class JDBC {
        pstmt.setString(4, year);
        pstmt.setString(5, page);
        
-       int check = pstmt.executeUpdate();
+       pstmt.executeUpdate();
+       }
     }
     public static void insertPublisher() throws SQLException
     {
@@ -357,7 +364,13 @@ public class JDBC {
      
 
        String sql;
-       
+        if(conflictCheck3(pName))
+       {
+           System.out.println(conflictCheck3(pName) 
+                   ?"Publisher Name already exist! ":null);
+       }
+        else
+        {
        sql = "INSERT INTO Publishers ( PublisherName ,PublisherAddress, PublisherPhone, PublisherEmail) VALUES" + 
                "(?,?,?,?)";
        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -373,5 +386,75 @@ public class JDBC {
        pstmt2.setString(1, pName);
        pstmt2.setString(2, pReplace);
        pstmt2.executeUpdate();
+        }
+    }
+    public static boolean conflictCheck(String g, String b) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement(); 
+        String sql; 
+        
+        sql = "SELECT * FROM Books WHERE GroupName = ? AND BookTitle = ?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, g);
+        pstmt.setString(2, b);
+        
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next();
+    }
+    public static boolean conflictCheck2(String b, String p) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement(); 
+        String sql; 
+
+        sql = "SELECT * FROM Books WHERE BookTitle = ? AND PublisherName = ?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, b);
+        pstmt.setString(2, p);
+
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next();
+    }
+    public static boolean conflictCheck3(String p) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement(); 
+        String sql; 
+
+        sql = "SELECT PublisherName FROM Publishers WHERE PublisherName = ?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, p);
+
+
+        ResultSet rs = pstmt.executeQuery();
+        
+        return rs.next();
+    }
+    public static boolean groupCheck(String g) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement();
+        String sql; 
+        
+        sql = "SELECT * FROM WritingGroups  WHERE GroupName =?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, g);
+        
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next();
+    }
+    public static boolean publisherCheck(String p) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement();
+        String sql; 
+        
+        sql = "SELECT * FROM Publishers  WHERE PublisherName =?"; 
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, p);
+        
+        ResultSet rs = pstmt.executeQuery();
+        return rs.next();
     }
 }//end FirstExample}
