@@ -313,7 +313,8 @@ public class JDBC {
         Connection conn = DriverManager.getConnection(DB_URL);
         Statement stmt = conn.createStatement();
         
-        Scanner in = new Scanner(System.in);
+        try
+        {
         listWritingGroups(stmt);
         
         System.out.println("Enter the group name:");
@@ -324,9 +325,9 @@ public class JDBC {
         System.out.println("Enter the publisher name:");
         String publisher = in.nextLine();
         System.out.println("\nEnter the year published:");
-        String year = in.nextLine();
+        int year = in.nextInt();
         System.out.println("\nEnter the number of pages:");
-        String page = in.nextLine();
+        int page = in.nextInt();
 
        String sql;
        if(!(groupCheck(group)&&publisherCheck(publisher)))
@@ -355,14 +356,20 @@ public class JDBC {
        pstmt.setString(1, group);
        pstmt.setString(2, title);
        pstmt.setString(3, publisher);
-       pstmt.setString(4, year);
-       pstmt.setString(5, page);
+       pstmt.setInt(4, year);
+       pstmt.setInt(5, page);
        
        pstmt.executeUpdate();
        System.out.println("Book has been inserted");
        System.out.println("\nPress Enter to continue");
        in.nextLine();
        }
+        }
+        catch(InputMismatchException exception)
+        {
+            System.out.println("Invalid integer input\nPlease try again\n");
+            
+        }   
     }
     public static void insertPublisher() throws SQLException
     {
