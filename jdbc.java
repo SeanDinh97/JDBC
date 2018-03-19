@@ -273,14 +273,14 @@ public class JDBC {
                 System.out.println("Specified publisher does not exist!");
        }
        else{
-        System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
+        System.out.printf(pdisplayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email"); 
         while (exist) { 
 //Retrieve by column name 
             String publisherName = rs.getString("PublisherName"); 
             String publisherAddress = rs.getString("PublisherAddress"); 
             String publisherPhone = rs.getString("PublisherPhone"); 
             String publisherEmail = rs.getString("PublisherEmail"); 
-        System.out.printf(displayFormat, 
+        System.out.printf(pdisplayFormat, 
                 dispNull(publisherName), dispNull(publisherAddress), dispNull(publisherPhone), dispNull(publisherEmail));
         exist = rs.next();
             }
@@ -301,7 +301,7 @@ public class JDBC {
        pstmt.setString(1, BookName);
        int exist = pstmt.executeUpdate();
        if (exist <= 0){
-           System.out.println("Specified book does not exist!");
+           System.out.println("Specified book does not exist!\n");
        }
        else {
            System.out.println("\nBook has been deleted");
